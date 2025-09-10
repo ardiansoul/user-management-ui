@@ -1,28 +1,26 @@
-import { Box, Button, InputBase } from "@mui/material";
+import { Box, Button, InputBase, styled } from "@mui/material";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import useModal from "../../hooks/useModal";
-import UserForm from "../user-form";
-import Modal from "../modal";
+
+const StyledSearch = styled(InputBase)(({ theme }) => ({
+  backgroundColor: theme.palette.grey[200],
+  padding: "0 8px",
+  borderRadius: theme.shape.borderRadius,
+  width: "300px",
+}));
 
 interface HeaderProps {
   handleSearch: (searchTerm: string) => void;
 }
 
 export default function Header({ handleSearch }: HeaderProps) {
-  const { isOpen, handleModal } = useModal();
+  const { handleModal } = useModal();
 
   return (
     <>
-      <Modal
-        isOpen={isOpen}
-        onClose={() => handleModal(false)}
-        title="Add User"
-      >
-        <UserForm />
-      </Modal>
       <Box display={"flex"} paddingBottom={4} justifyContent={"space-between"}>
         <h1>User Management</h1>
-        <InputBase
+        <StyledSearch
           name="search"
           placeholder="Search..."
           onChange={(e) => handleSearch(e.target.value)}

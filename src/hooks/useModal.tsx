@@ -1,11 +1,7 @@
-import { useState } from "react";
+import { useContext } from "react";
+import { modalContext } from "../contexts/modal";
 
 export default function useModal() {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const handleModal = (isOpen?: boolean) => {
-    setIsOpen(isOpen ?? !isOpen);
-  };
-
+  const { isOpen, handleModal } = useContext(modalContext);
   return { isOpen, handleModal };
 }

@@ -28,7 +28,7 @@ export default class UserService {
       },
       params: {
         name_like: searchTerm,
-        _start: pagination?.page,
+        _start: (pagination?.page ?? 0) * (pagination?.pageSize ?? 5),
         _limit: pagination?.pageSize,
       },
     });

@@ -8,27 +8,21 @@ import {
 } from "@mui/material";
 import { Close } from "@mui/icons-material";
 import { useEffect } from "react";
+import useModal from "../../hooks/useModal";
 
 interface ModalProps {
   children: React.ReactNode;
-  isOpen: boolean;
-  onClose: () => void;
   title?: string;
   size?: "xs" | "sm" | "md" | "lg" | "xl";
 }
 
-export default function Modal({
-  isOpen,
-  onClose,
-  children,
-  title = "Modal Title",
-  size = "md",
-}: ModalProps) {
+export default function Modal({ children, title, size = "md" }: ModalProps) {
+  const { isOpen, handleModal } = useModal();
   // Handle escape key press to close modal
   useEffect(() => {
     const handleEscKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        onClose();
+        handleModal(false);
       }
     };
 
@@ -42,7 +36,7 @@ export default function Modal({
       document.removeEventListener("keydown", handleEscKey);
       document.body.style.overflow = "unset";
     };
-  }, [isOpen, onClose]);
+  }, [isOpen, handleModal]);
 
   if (!isOpen) return null;
 
@@ -62,11 +56,11 @@ export default function Modal({
           zIndex: 1300,
           p: 2,
         }}
-        onClick={onClose}
+        onClick={() => handleModal(false)}
       >
         <Dialog
           open={isOpen}
-          onClose={onClose}
+          onClose={() => handleModal(false)}
           maxWidth={size}
           onClick={(e) => e.stopPropagation()}
         >
@@ -80,7 +74,7 @@ export default function Modal({
           >
             {title}
             <IconButton
-              onClick={onClose}
+              onClick={() => handleModal(false)}
               sx={{ color: "text.secondary" }}
               aria-label="close"
             >

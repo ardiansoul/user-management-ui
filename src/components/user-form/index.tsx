@@ -3,6 +3,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import UserService from "../../services/users";
 import type User from "../../interface/user";
+import useModal from "../../hooks/useModal";
+import useAlert from "../../hooks/useAlert";
 
 interface UserFormProps {
   data?: Pick<User, "id" | "name" | "email"> | null;
@@ -10,6 +12,8 @@ interface UserFormProps {
 
 export default function UserForm({ data }: UserFormProps) {
   const queryClient = useQueryClient();
+  const { handleModal } = useModal();
+  const { handleAlert } = useAlert();
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formData, setFormData] = useState({
     name: data?.name || "",
@@ -23,6 +27,11 @@ export default function UserForm({ data }: UserFormProps) {
       : () => UserService.createUser(formData),
     onSuccess: () => {
       queryClient.invalidateQueries();
+      handleModal(false);
+      handleAlert(
+        "success",
+        `User ${data?.id ? "updated" : "created"} successfully`
+      );
     },
   });
 
